@@ -10,18 +10,15 @@ import jni.JavaObject;
 
 struct JavaString {
 public:
-	static JavaString opCall() {
-		writefln("%s", __FUNCTION__);
-		return JavaString(JavaEnv(), cast(jstring) null);
-	}
 
-	this(JavaEnv env, jstring c) {
+	this(JavaEnv env, jstring c=null) {
 		writefln("%s(JavaEnv, jstring)", __FUNCTION__);
 		base.__ctor(env, c);
 		Init();
 	}
 
 	this(JavaEnv env, string _val) {
+		static import std.string;
 		writefln("%s(JavaEnv, string)", __FUNCTION__);
 		this(env, env.Val().NewStringUTF(std.string.toStringz(_val)));
 	}
@@ -100,6 +97,7 @@ private:
 
 	void Init() {
 		if(Valid()) {
+			static import std.conv;
 			const(char) * tmp = _env.Val().GetStringUTFChars(Val(), null);
 			val = std.conv.to!string(tmp);
 			_env.Val().ReleaseStringUTFChars(Val(), tmp);

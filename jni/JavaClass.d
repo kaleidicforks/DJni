@@ -13,12 +13,8 @@ import jni.JavaField;
 
 struct JavaClass {
 public:
-	static JavaClass opCall() {
-		writefln("%s", __FUNCTION__);
-		return JavaClass(JavaEnv(), cast(jclass) null);
-	}
 
-	this(JavaEnv env, jclass c) {
+	this(JavaEnv env, jclass c=null) {
 		writefln("%s(JavaEnv, jclass)", __FUNCTION__);
 		base.__ctor(env, c);
 	}
@@ -97,6 +93,7 @@ public:
 	// somehow in JNI constructor is not a static method.
 	// i made it static just for sanity
 	JavaStaticMethod!T GetConstructor(T)() {
+		static import std.string;
 		return JavaStaticMethod!T(this, Env().Val().GetMethodID(Val(), std.string.toStringz("<init>"), std.string.toStringz(JniSignatureBuilder!T.Sign)));
 	}
 
@@ -125,7 +122,9 @@ public:
 
 private:
 	static jclass GetClass(JavaEnv env, string name) {
-		if(!env.Valid()) {
+		static import std.string;
+		static import std.array;
+		if(!env.valid()) {
 			writeln("Cannot load class ", name, ", broken JavaEnv.");
 			return null;
 		}

@@ -33,6 +33,7 @@ public:
 	}
 
 	this(string classPath, jint ver = JNI_DEFAULT_VERSION) {
+		static import std.string;
 		val = null;
 		_version = ver;
 		doDestroy = true;
@@ -74,10 +75,6 @@ public:
 		Destroy();
 	}
 
-	// default constructor emulation
-	static JniJavaVM opCall() {
-		return JniJavaVM(JNI_DEFAULT_VERSION);
-    }
 
 	// swap with rvalue
 	ref JniJavaVM opAssign(JniJavaVM v) {

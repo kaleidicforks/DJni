@@ -19,14 +19,11 @@ version(MSYM_DEBUG_JNI_REF_CNT) {
 }
 
 
-struct JavaObject {
+struct JavaObject
+{
 public:
-	static JavaObject opCall() {
-		writefln("%s", __PRETTY_FUNCTION__);
-		return JavaObject(JavaEnv(), null);
-	}
 
-	this(JavaEnv env, jobject o) {
+	this(JavaEnv env, jobject o=null) {
 		writefln("%s(JavaEnv, jobject)", __FUNCTION__);
 		_env = env;
 		_obj = o;
@@ -38,7 +35,8 @@ public:
 		}
 	}
 
-	this(JavaObject o) {
+	this(JavaObject o)
+	{
 		writefln("%s(JavaObject)", __FUNCTION__);
 		_env = o._env;
 		_obj = o._obj;
@@ -95,7 +93,7 @@ public:
 		return FromJavaProxy!JavaClass(Env(), Env().Val().GetObjectClass(Val())).Val();
 	}
 
-	bool Valid() const { return _env.Valid() && _obj !is null; }
+	bool Valid() const { return _env.valid() && _obj !is null; }
 	JavaEnv Env() const { return cast(JavaEnv) _env; }
 
 	jobject Val() const { return cast(jobject) _obj; }
@@ -153,11 +151,7 @@ package:
 
 struct JavaBoolean {
 public:
-	static JavaBoolean opCall() {
-		writefln("%s", __PRETTY_FUNCTION__);
-		return JavaBoolean(JavaEnv(), null);
-	}
-	this(JavaEnv env, jobject c) {
+	this(JavaEnv env, jobject c=null) {
 		writefln("%s(JavaEnv, jobject)", __FUNCTION__);
 		base.__ctor(env, c);
 	}

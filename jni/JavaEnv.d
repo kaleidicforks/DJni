@@ -15,10 +15,6 @@ public:
 		val = env;
 	}
 
-	// default constructor emulation
-	static JavaEnv opCall() {
-		return JavaEnv(null);
-    }
 
 	JNIEnv * Val() {
 		return val;
@@ -28,7 +24,7 @@ public:
 		return val;
 	}
 
-	bool Valid() const {
+	bool valid() const {
 		return val != null;
 	}
 
@@ -40,20 +36,20 @@ public:
 		return val == env.val;
 	}
 
-	jint Version() const {
+	jint getVersion() const {
 		return val.GetVersion();
 	}
 
-	JniJavaVM GetVM() const {
+	JniJavaVM getVM() const {
 		JavaVM * vm;
 		if(val.GetJavaVM(&vm) != 0) {
 			writeln("Error: cannot get JavaVM from JNIEnv!");
 			return JniJavaVM(); // return invalid
 		}
-		return JniJavaVM(vm, Version());
+		return JniJavaVM(vm, getVersion());
 	}
 
-	JavaClass FindClass(string str) {
+	JavaClass findClass(string str) {
 		return JavaClass(this, str);
 	}
 
